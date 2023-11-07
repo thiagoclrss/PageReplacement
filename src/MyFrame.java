@@ -1,11 +1,12 @@
 import java.awt.FlowLayout;
 import java.awt.event.*;
-import java.io.File;
+import java.io.*;
 import javax.swing.*;
 
 
 public class MyFrame extends JFrame implements ActionListener{
     JButton button;
+    String line;
     MyFrame(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new FlowLayout());
@@ -18,15 +19,21 @@ public class MyFrame extends JFrame implements ActionListener{
 
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)  {
         if(e.getSource()==button) {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setCurrentDirectory(new File(".")); //sets current directory
             int response = fileChooser.showOpenDialog(null); //select file to open
             //int response = fileChooser.showSaveDialog(null); //select file to save
             if(response == JFileChooser.APPROVE_OPTION) {
-                File file = new File(fileChooser.getSelectedFile().getAbsoluteFile().toString());
-                System.out.println(file);
+                File file = fileChooser.getSelectedFile();
+                try{
+                    BufferedReader br = new BufferedReader(new FileReader(file));
+                    line = br.readLine();
+                } catch (IOException exception){
+                    System.out.println("Arquivo não foi encontrado!");
+                }
+                System.out.println(line);
             }
         }
     }
