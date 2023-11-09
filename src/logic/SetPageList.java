@@ -1,18 +1,34 @@
 package logic;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SetPageList {
-    public static String pages;
+    public static String pageFile;
+    public static ArrayList<Page> pages = new ArrayList<>();
     public SetPageList(String pages) {
-        this.pages = pages;
+        this.pageFile = pages;
     }
+    //ArrayList<String> pageList = new ArrayList<>();
+    public static String[] pageList;
 
-    public static Pattern pattern = Pattern.compile("-(.*?)-");
-    public static Matcher matcher = pattern.matcher(pages);
+    public static void setPage (){
+        pageList = pageFile.split("-");
 
+        for(int i = 0; i < pageList.length; i++){
+            if(pageList[i].contains("R")){
+                pageList[i].replace("R", "");
+                //pageList[i] = pageList[i].split("R");
+                pages.add(new Page(pageList[i], "R"));
 
-
-
+            } else {
+                pageList[i].replace("W", "");
+                pages.add(new Page(pageList[i], "W"));
+            }
+        }
+        System.out.println(pages);
+    }
 }

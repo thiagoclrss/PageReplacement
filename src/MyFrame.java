@@ -1,3 +1,5 @@
+import logic.SetPageList;
+
 import java.awt.FlowLayout;
 import java.awt.event.*;
 import java.io.*;
@@ -30,6 +32,8 @@ public class MyFrame extends JFrame implements ActionListener{
                 try{
                     BufferedReader br = new BufferedReader(new FileReader(file));
                     line = br.readLine();
+                    SetPageList setPageList = new SetPageList(line);
+                    SetPageList.setPage();
                 } catch (IOException exception){
                     System.out.println("Arquivo não foi encontrado!");
                 }
