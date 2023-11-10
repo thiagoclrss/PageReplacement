@@ -20,12 +20,11 @@ public class SetPageList {
 
         for(int i = 0; i < pageList.length; i++){
             if(pageList[i].contains("R")){
-                pageList[i].replace("R", "");
-                //pageList[i] = pageList[i].split("R");
+                pageList[i] = pageList[i].replace("R", "");
                 pages.add(new Page(pageList[i], "R"));
 
             } else {
-                pageList[i].replace("W", "");
+                pageList[i] = pageList[i].replace("W", "");
                 pages.add(new Page(pageList[i], "W"));
             }
         }
