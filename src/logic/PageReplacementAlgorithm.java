@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class PageReplacementAlgorithm {
-    private int frames;
-    private int quantBitR;
+    final private int frames;
+    final private int quantBitR;
     ArrayList<Page> pages;
     ArrayList<Page> processMemory;
     public PageReplacementAlgorithm(int frames, int quantBitR) {

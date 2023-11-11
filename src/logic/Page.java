@@ -5,6 +5,10 @@ public class Page {
     String pageId;
     String type;
 
+    public Page(String pageId) {
+        this.pageId = pageId;
+    }
+
     public Page(String pageId, String type) {
         this.pageId = pageId;
         this.type = type;
