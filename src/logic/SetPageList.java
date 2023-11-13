@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 public class SetPageList {
     public static String pageFile;
-    public static ArrayList<Page> pages = new ArrayList<>();
+    public static ArrayList<String> pages = new ArrayList<>();
     public static ArrayList<Page> pagesRW = new ArrayList<>();
     public SetPageList(String pages) {
         pageFile = pages;
@@ -16,7 +17,7 @@ public class SetPageList {
 
     public static String[] pageList;
 
-    public static void setPageRW (){
+    public void setPageRW (){
         pageList = pageFile.split("-");
 
         for(int i = 0; i < pageList.length; i++){
@@ -29,22 +30,22 @@ public class SetPageList {
                 pagesRW.add(new Page(pageList[i], "W"));
             }
         }
-        System.out.println(pages);
+        System.out.println(pagesRW);
     }
 
-    public static void setPage (){
+    public void setPage (){
         pageList = pageFile.split("-");
 
-        for(int i = 0; i < pageList.length; i++){
-            if(pageList[i].contains("R")){
+        IntStream.range(0, pageList.length).forEach(i -> {
+            if (pageList[i].contains("R")) {
                 pageList[i] = pageList[i].replace("R", "");
-                pages.add(new Page(pageList[i]));
+                pages.add(pageList[i]);
 
             } else {
                 pageList[i] = pageList[i].replace("W", "");
-                pages.add(new Page(pageList[i]));
+                pages.add(pageList[i]);
             }
-        }
+        });
         System.out.println(pages);
     }
 }

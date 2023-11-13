@@ -1,3 +1,4 @@
+import logic.PageReplacementAlgorithm;
 import logic.SetPageList;
 
 import java.awt.FlowLayout;
@@ -33,11 +34,12 @@ public class MyFrame extends JFrame implements ActionListener{
                     BufferedReader br = new BufferedReader(new FileReader(file));
                     line = br.readLine();
                     SetPageList setPageList = new SetPageList(line);
-                    SetPageList.setPage();
+                    setPageList.setPage();
+                    PageReplacementAlgorithm pageReplacementAlgorithm = new PageReplacementAlgorithm(4);
+                    pageReplacementAlgorithm.fifo();
                 } catch (IOException exception){
                     System.out.println("Arquivo não foi encontrado!");
                 }
-                System.out.println(line);
             }
         }
     }
