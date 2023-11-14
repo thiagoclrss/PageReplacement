@@ -2,10 +2,12 @@ package logic;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class PageReplacementAlgorithm {
     final private int frames;
-    private int quantBitR = 0;
+    private int quantBitR;
+    int auxQuantBitR = quantBitR;
     ArrayList<String> pagesString;
     ArrayList<Page> pagesPage;
     ArrayList<String> processMemoryString;
@@ -25,36 +27,6 @@ public class PageReplacementAlgorithm {
     }
 
     public void fifo() {
-        int pageHit = 0;
-        int pageFault = 0;
-        for (int i = 0; i < pagesString.size(); i++){
-            if(processMemoryString.size() != (frames)){
-                if(processMemoryString.contains(pagesString.get(i))) pageHit++;
-                else {
-                    processMemoryString.add(pagesString.get(i));
-                    System.out.println(processMemoryString);
-                    pageFault++;
-                }
-            }else{
-                if(processMemoryString.contains(pagesString.get(i))) {
-                    pageHit++;
-                }
-                else{
-                    pageFault++;
-                    processMemoryString.set(0, pagesString.get(i));
-                    Collections.rotate(processMemoryString, -1);
-                    System.out.println(processMemoryString);
-                }
-            }
-        }
-        System.out.println("----------- FIFO -----------");
-        System.out.println("Acertos: " + pageHit);
-        System.out.println("Faltas: " + pageFault);
-        System.out.println("----------- Processos na memória -----------");
-        processMemoryString.forEach(System.out::println);
-    }
-
-    public void secondChance () {
         int pageHit = 0;
         int pageFault = 0;
         for (String s : pagesString) {
@@ -81,6 +53,61 @@ public class PageReplacementAlgorithm {
         System.out.println("Faltas: " + pageFault);
         System.out.println("----------- Processos na memória -----------");
         processMemoryString.forEach(System.out::println);
+    }
+
+    public void secondChance() {
+        int pageHit = 0;
+        int pageFault = 0;
+
+        for (int i = 0; i < pagesPage.size(); i++) {
+            Page page = pagesPage.get(i);
+            if(auxQuantBitR == 0) auxQuantBitR = setBitRToZero(processMemoryPage);
+            if (processMemoryPage.size() != (frames)) {
+                if (containsPageID(processMemoryPage, page)) {
+                    pageHit++;
+                } else {
+                    processMemoryPage.add(page);
+                    System.out.println(processMemoryPage);
+                    pageFault++;
+                }
+            } else {
+                if (containsPageID(processMemoryPage, page)) {
+                    pageHit++;
+                    auxQuantBitR--;
+                    page.setBitR(true);
+                } else {
+                    pageFault++;
+                    if (!processMemoryPage.get(0).isBitR()) {
+                        processMemoryPage.set(0, page);
+                    } else {
+                        for (Page pageR: processMemoryPage) {
+                            if(!page.isBitR()) processMemoryPage.set(0, page);
+                            else{
+                                processMemoryPage.get(0).setBitR(false);
+                                processMemoryPage.set(0, processMemoryPage.get(0));
+                                Collections.rotate(processMemoryPage, -1);
+                            }
+                        }
+                    }
+                    Collections.rotate(processMemoryPage, -1);
+                    System.out.println(processMemoryPage);
+                }
+            }
+        }
+        System.out.println("----------- FIFO -----------");
+        System.out.println("Acertos: " + pageHit);
+        System.out.println("Faltas: " + pageFault);
+        System.out.println("----------- Processos na memória -----------");
+        processMemoryPage.forEach(System.out::println);
+    }
+
+    boolean containsPageID (List<Page> page, Page pageID) {
+        return page.stream().anyMatch(p -> p.getPageId().equals(pageID.pageId));
+    }
+
+    int setBitRToZero(List<Page> processMemory){
+        processMemory.forEach(page -> page.setBitR(false));
+        return quantBitR;
     }
 
 

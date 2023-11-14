@@ -4,10 +4,7 @@ public class Page {
 
     String pageId;
     String type;
-
-    public Page(String pageId) {
-        this.pageId = pageId;
-    }
+    boolean bitR = false;
 
     public Page(String pageId, String type) {
         this.pageId = pageId;
@@ -28,6 +25,14 @@ public class Page {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public boolean isBitR() {
+        return bitR;
+    }
+
+    public void setBitR(boolean bitR) {
+        this.bitR = bitR;
     }
 
     @Override
