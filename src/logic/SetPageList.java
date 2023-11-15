@@ -30,7 +30,7 @@ public class SetPageList {
                 pagesRW.add(new Page(pageList[i], "W"));
             }
         }
-        System.out.println(pagesRW);
+        pagesRW.forEach(page -> System.out.print(page.pageId + " " + page.type + ", "));
     }
 
     public void setPage (){

@@ -27,14 +27,13 @@ public class MyFrame extends JFrame implements ActionListener{
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setCurrentDirectory(new File(".")); //sets current directory
             int response = fileChooser.showOpenDialog(null); //select file to open
-            //int response = fileChooser.showSaveDialog(null); //select file to save
             if(response == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
                 try{
                     BufferedReader br = new BufferedReader(new FileReader(file));
                     line = br.readLine();
                     SetPageList setPageList = new SetPageList(line);
-                    setPageList.setPage();
+                    setPageList.setPageRW();
                     PageReplacementAlgorithm pageReplacementAlgorithm = new PageReplacementAlgorithm(4, 6);
                     pageReplacementAlgorithm.secondChance();
                 } catch (IOException exception){

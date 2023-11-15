@@ -84,7 +84,6 @@ public class PageReplacementAlgorithm {
                             if(!page.isBitR()) processMemoryPage.set(0, page);
                             else{
                                 processMemoryPage.get(0).setBitR(false);
-                                processMemoryPage.set(0, processMemoryPage.get(0));
                                 Collections.rotate(processMemoryPage, -1);
                             }
                         }
