@@ -93,7 +93,7 @@ public class PageReplacementAlgorithm {
                 }
             }
         }
-        System.out.println("----------- FIFO -----------");
+        System.out.println("----------- SEGUNDA CHANCE -----------");
         System.out.println("Acertos: " + pageHit);
         System.out.println("Faltas: " + pageFault);
         System.out.println("----------- Processos na memória -----------");
@@ -122,9 +122,9 @@ public class PageReplacementAlgorithm {
             } else {
                 if (processMemoryString.contains(s)) {
                     processMemoryString.forEach(page -> {
-                        while (processMemoryString.indexOf(s) != frames){
+                        while (processMemoryString.indexOf(s) != frames - 1){
                             Collections.rotate(processMemoryString, -1);
-                            if(processMemoryString.indexOf(s) == frames) break;
+                            //if(processMemoryString.indexOf(s) == frames - 1) break;
                         }
                     });
                     pageHit++;
@@ -136,7 +136,7 @@ public class PageReplacementAlgorithm {
                 }
             }
         }
-        System.out.println("----------- FIFO -----------");
+        System.out.println("----------- MRU -----------");
         System.out.println("Acertos: " + pageHit);
         System.out.println("Faltas: " + pageFault);
         System.out.println("----------- Processos na memória -----------");
