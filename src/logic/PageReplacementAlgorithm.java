@@ -63,11 +63,13 @@ public class PageReplacementAlgorithm {
             if (auxQuantBitR == 0) auxQuantBitR = setBitRToZero(processMemoryPage);
             if (processMemoryPage.size() != (frames)) {
                 if (containsPageID(processMemoryPage, page)) {
+                    auxQuantBitR--;
                     pageHit++;
                 } else {
                     page.setBitR(true);
                     processMemoryPage.add(page);
                     System.out.println(processMemoryPage);
+                    auxQuantBitR--;
                     pageFault++;
                 }
             } else {
@@ -79,16 +81,27 @@ public class PageReplacementAlgorithm {
                     pageFault++;
                     if (!processMemoryPage.get(0).isBitR()) {
                         processMemoryPage.set(0, page);
+                        Collections.rotate(processMemoryPage, -1);
+                        auxQuantBitR--;
                     } else {
-                        for (Page pageR : processMemoryPage) {
-                            if (!pageR.isBitR()) processMemoryPage.set(0, page);
-                            else {
-                                processMemoryPage.get(0).setBitR(false);
+                        while (true) {
+                            //com o for o laço percorria todo o vetor e n add a pagina, preciso encontrar a logca para add a pagina na primeira posicao
+                            if (!processMemoryPage.get(0).isBitR()) {
+                                processMemoryPage.set(0, page);
+                                processMemoryPage.get(0).setBitR(true);
+                                if(processMemoryPage.get(0) ==  page) break;
                                 Collections.rotate(processMemoryPage, -1);
+                            } else {
+                                processMemoryPage.get(0).setBitR(false);
+                                System.out.println("--------------------" + processMemoryPage.get(0));
+                                System.out.println(processMemoryPage.get(0).isBitR());
+                                Collections.rotate(processMemoryPage, -1);
+
                             }
                         }
+                        auxQuantBitR--;
                     }
-                    Collections.rotate(processMemoryPage, -1);
+
                     System.out.println(processMemoryPage);
                 }
             }
