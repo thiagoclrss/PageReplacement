@@ -3,6 +3,7 @@ package logic;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PageReplacementAlgorithm {
     final private int frames;
@@ -89,19 +90,16 @@ public class PageReplacementAlgorithm {
                             if (!processMemoryPage.get(0).isBitR()) {
                                 processMemoryPage.set(0, page);
                                 processMemoryPage.get(0).setBitR(true);
-                                if(processMemoryPage.get(0) ==  page) break;
+                                if (processMemoryPage.get(0) == page) break;
                                 Collections.rotate(processMemoryPage, -1);
                             } else {
                                 processMemoryPage.get(0).setBitR(false);
-                                System.out.println("--------------------" + processMemoryPage.get(0));
-                                System.out.println(processMemoryPage.get(0).isBitR());
-                                Collections.rotate(processMemoryPage, -1);
 
+                                Collections.rotate(processMemoryPage, -1);
                             }
                         }
                         auxQuantBitR--;
                     }
-
                     System.out.println(processMemoryPage);
                 }
             }
@@ -121,9 +119,9 @@ public class PageReplacementAlgorithm {
                 if (processMemoryString.contains(s)) {
                     pageHit++;
                     processMemoryString.forEach(page -> {
-                        while (processMemoryString.indexOf(s) != processMemoryString.size() - 1){
-                            Collections.rotate(processMemoryString, -1);
-                            if(processMemoryString.indexOf(s) == processMemoryString.size() - 1) break;
+                        while (processMemoryString.indexOf(s) != processMemoryString.size() - 1) {
+                            Collections.rotate(processMemoryString.subList(processMemoryString.indexOf(s), processMemoryString.size()), -1);
+                            System.out.println(processMemoryString);
                         }
                     });
 
@@ -135,9 +133,10 @@ public class PageReplacementAlgorithm {
             } else {
                 if (processMemoryString.contains(s)) {
                     processMemoryString.forEach(page -> {
-                        while (processMemoryString.indexOf(s) != frames - 1){
-                            Collections.rotate(processMemoryString, -1);
-                            //if(processMemoryString.indexOf(s) == frames - 1) break;
+                        while (processMemoryString.indexOf(s) != frames - 1) {
+                            Collections.rotate(processMemoryString.subList(processMemoryString.indexOf(s), processMemoryString.size()), -1);
+                            System.out.println(processMemoryString);
+
                         }
                     });
                     pageHit++;
@@ -156,17 +155,95 @@ public class PageReplacementAlgorithm {
         processMemoryString.forEach(System.out::println);
     }
 
+    public void notRecentlyUsed() {
+        int pageHit = 0;
+        int pageFault = 0;
+
+        for (Page page : pagesPage) {
+            if (auxQuantBitR == 0) auxQuantBitR = setBitRToZero(processMemoryPage);
+            if (processMemoryPage.size() != (frames)) {
+                if (containsPageID(processMemoryPage, page)) {
+                    if(page.type.equals("W")) {
+                        page.setBitM(true);
+                        processMemoryPage.set(indexOfPageById(processMemoryPage,page), page);
+                    }
+                    auxQuantBitR--;
+                    pageHit++;
+                } else {
+                    page.setBitR(true);
+                    if(page.type.equals("W")) page.setBitM(true);
+                    processMemoryPage.add(page);
+                    System.out.println(processMemoryPage);
+                    auxQuantBitR--;
+                    pageFault++;
+                }
+            } else {
+                if (containsPageID(processMemoryPage, page)) {
+                    pageHit++;
+                    auxQuantBitR--;
+                    if(page.type.equals("W")) {
+                        page.setBitM(true);
+                        processMemoryPage.set(indexOfPageById(processMemoryPage,page), page);
+                    }
+                    page.setBitR(true);
+                } else {
+                    pageFault++;
+                    for(int p = 0; p < processMemoryPage.size(); p++){
+                        if (!processMemoryPage.get(p).isBitR() && !processMemoryPage.get(p).isBitM()) {
+                            processMemoryPage.set(p, page);
+                            //Collections.rotate(processMemoryPage, -1);
+                            auxQuantBitR--;
+                            break;
+                        }
+                        if (!processMemoryPage.get(p).isBitR() && processMemoryPage.get(p).isBitM()) {
+                            processMemoryPage.set(p, page);
+                            //Collections.rotate(processMemoryPage, -1);
+                            auxQuantBitR--;
+                            break;
+                        }
+                        if (processMemoryPage.get(p).isBitR() && !processMemoryPage.get(p).isBitM()) {
+                            processMemoryPage.set(p, page);
+                            //Collections.rotate(processMemoryPage, -1);
+                            auxQuantBitR--;
+                            break;
+                        }
+                        if (processMemoryPage.get(p).isBitR() && processMemoryPage.get(p).isBitM()) {
+                            processMemoryPage.set(p, page);
+                            //Collections.rotate(processMemoryPage, -1);
+                            auxQuantBitR--;
+                            break;
+                        }
+                    }
+                    System.out.println(processMemoryPage);
+                }
+            }
+        }
+        System.out.println("----------- NUR -----------");
+        System.out.println("Acertos: " + pageHit);
+        System.out.println("Faltas: " + pageFault);
+        System.out.println("----------- Processos na memória -----------");
+        processMemoryPage.forEach(System.out::println);
+    }
 
 
-    boolean containsPageID (List<Page> page, Page pageID) {
+    boolean containsPageID(List<Page> page, Page pageID) {
         return page.stream().anyMatch(p -> p.getPageId().equals(pageID.pageId));
     }
 
-    int setBitRToZero(List<Page> processMemory){
+    int indexOfPageById(List<Page> page, Page pageID){
+        AtomicInteger i = new AtomicInteger();
+        page.forEach(p -> {
+            if(p.getPageId().equals(pageID.pageId)){
+               i.set(page.indexOf(p));
+            }
+        });
+        return i.get();
+    }
+
+    int setBitRToZero(List<Page> processMemory) {
         processMemory.forEach(page -> page.setBitR(false));
         return quantBitR;
     }
-
 
 
 }

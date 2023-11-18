@@ -5,7 +5,7 @@ public class Page {
     String pageId;
     String type;
     boolean bitR = false;
-
+    boolean bitM = false;
     public Page(String pageId, String type) {
         this.pageId = pageId;
         this.type = type;
@@ -33,6 +33,14 @@ public class Page {
 
     public void setBitR(boolean bitR) {
         this.bitR = bitR;
+    }
+
+    public boolean isBitM() {
+        return bitM;
+    }
+
+    public void setBitM(boolean bitM) {
+        this.bitM = bitM;
     }
 
     @Override

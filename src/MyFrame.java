@@ -1,7 +1,7 @@
 import logic.PageReplacementAlgorithm;
 import logic.SetPageList;
 
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
@@ -16,7 +16,7 @@ public class MyFrame extends JFrame implements ActionListener{
         button = new JButton("Select File");
         button.addActionListener(this);
         this.add(button);
-        this.pack();
+        this.setSize(new Dimension(1280,720));
         this.setVisible(true);
     }
 
@@ -35,7 +35,7 @@ public class MyFrame extends JFrame implements ActionListener{
                     SetPageList setPageList = new SetPageList(line);
                     setPageList.setPageRW();
                     PageReplacementAlgorithm pageReplacementAlgorithm = new PageReplacementAlgorithm(6,10);
-                    pageReplacementAlgorithm.secondChance();
+                    pageReplacementAlgorithm.notRecentlyUsed();
                 } catch (IOException exception){
                     System.out.println("Arquivo não foi encontrado!");
                 }
