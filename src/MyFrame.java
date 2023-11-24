@@ -34,7 +34,7 @@ public class MyFrame extends JFrame implements ActionListener{
                     line = br.readLine();
                     SetPageList setPageList = new SetPageList(line);
                     setPageList.setPageRW();
-                    PageReplacementAlgorithm pageReplacementAlgorithm = new PageReplacementAlgorithm(6,10);
+                    PageReplacementAlgorithm pageReplacementAlgorithm = new PageReplacementAlgorithm(6, 10);
                     pageReplacementAlgorithm.notRecentlyUsed();
                 } catch (IOException exception){
                     System.out.println("Arquivo não foi encontrado!");

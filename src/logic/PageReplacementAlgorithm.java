@@ -158,6 +158,7 @@ public class PageReplacementAlgorithm {
     public void notRecentlyUsed() {
         int pageHit = 0;
         int pageFault = 0;
+        ArrayList<Page> auxProcessMemory;
 
         for (Page page : pagesPage) {
             if (auxQuantBitR == 0) auxQuantBitR = setBitRToZero(processMemoryPage);
@@ -167,6 +168,7 @@ public class PageReplacementAlgorithm {
                         page.setBitM(true);
                         processMemoryPage.set(indexOfPageById(processMemoryPage,page), page);
                     }
+                    page.setBitR(true);
                     auxQuantBitR--;
                     pageHit++;
                 } else {
@@ -178,6 +180,7 @@ public class PageReplacementAlgorithm {
                     pageFault++;
                 }
             } else {
+                 auxProcessMemory = processMemoryPage;
                 if (containsPageID(processMemoryPage, page)) {
                     pageHit++;
                     auxQuantBitR--;
@@ -189,9 +192,10 @@ public class PageReplacementAlgorithm {
                 } else {
                     pageFault++;
                     for(int p = 0; p < processMemoryPage.size(); p++){
-                        if (!processMemoryPage.get(p).isBitR() && !processMemoryPage.get(p).isBitM()) {
-                            processMemoryPage.set(p, page);
-                            //Collections.rotate(processMemoryPage, -1);
+                        if (!auxProcessMemory.get(p).isBitR() && !auxProcessMemory.get(p).isBitM()) {
+                            auxProcessMemory.set(p, page);
+                            //tenho q setar a página que entrou no aux no lugar da qual deve entrar na memoria
+                            Collections.rotate(auxProcessMemory, -1);
                             auxQuantBitR--;
                             break;
                         }
