@@ -195,7 +195,7 @@ public class PageReplacementAlgorithm {
                     if (page.type.equals("W")) {
                         page.setBitM(true);
                         processMemoryPage.set(indexOfPageById(processMemoryPage, page), page);
-                        auxProcessMemory.set(indexOfPageById(processMemoryPage, page), page);
+                        auxProcessMemory.set(indexOfPageById(auxProcessMemory, page), page);
                     }
 
                 } else {
@@ -211,7 +211,12 @@ public class PageReplacementAlgorithm {
                                 processMemoryPage.set(indexOfPageById(processMemoryPage, pageToBeReplaced), page);
                                 replaced = true;
                                 //tenho q setar a página que entrou no aux no lugar da qual deve entrar na memoria
-                                Collections.rotate(auxProcessMemory, -1);
+                                while (auxProcessMemory.indexOf(page) != frames - 1) {
+                                    Collections.rotate(auxProcessMemory
+                                            .subList(auxProcessMemory.indexOf(page), auxProcessMemory.size()), -1);
+                                    System.out.println(auxProcessMemory);
+                                }
+                                //Collections.rotate(auxProcessMemory, -1);
                                 // auxQuantBitR--;
                                 break;
                             }
@@ -228,7 +233,12 @@ public class PageReplacementAlgorithm {
                                 auxProcessMemory.set(p, page);
                                 processMemoryPage.set(indexOfPageById(processMemoryPage, pageToBeReplaced), page);
                                 replaced = true;
-                                Collections.rotate(auxProcessMemory, -1);
+                                while (auxProcessMemory.indexOf(page) != frames - 1) {
+                                    Collections.rotate(auxProcessMemory
+                                            .subList(auxProcessMemory.indexOf(page), auxProcessMemory.size()), -1);
+                                    System.out.println(auxProcessMemory);
+                                }
+                                //Collections.rotate(auxProcessMemory, -1);
                                 //auxQuantBitR--;
                                 break;
                             }
@@ -244,7 +254,12 @@ public class PageReplacementAlgorithm {
                                 auxProcessMemory.set(p, page);
                                 processMemoryPage.set(indexOfPageById(processMemoryPage, pageToBeReplaced), page);
                                 replaced = true;
-                                Collections.rotate(auxProcessMemory, -1);
+                                while (auxProcessMemory.indexOf(page) != frames - 1) {
+                                    Collections.rotate(auxProcessMemory
+                                            .subList(auxProcessMemory.indexOf(page), auxProcessMemory.size()), -1);
+                                    System.out.println(auxProcessMemory);
+                                }
+                                //Collections.rotate(auxProcessMemory, -1);
                                 //auxQuantBitR--;
                                 break;
                             }
@@ -260,7 +275,12 @@ public class PageReplacementAlgorithm {
                                 auxProcessMemory.set(p, page);
                                 processMemoryPage.set(indexOfPageById(processMemoryPage, pageToBeReplaced), page);
                                 replaced = true;
-                                Collections.rotate(auxProcessMemory, -1);
+                                while (auxProcessMemory.indexOf(page) != frames - 1) {
+                                    Collections.rotate(auxProcessMemory
+                                            .subList(auxProcessMemory.indexOf(page), auxProcessMemory.size()), -1);
+                                    System.out.println(auxProcessMemory);
+                                }
+                                //Collections.rotate(auxProcessMemory, -1);
                                 //auxQuantBitR--;
                                 break;
                             }
