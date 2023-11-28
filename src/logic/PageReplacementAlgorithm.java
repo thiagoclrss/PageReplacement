@@ -174,9 +174,9 @@ public class PageReplacementAlgorithm {
                     page.setBitR(true);
                     if (page.type.equals("W")) {
                         page.setBitM(true);
-                        processMemoryPage.set(indexOfPageById(processMemoryPage, page), page);
                         //auxProcessMemory.set(indexOfPageById(auxProcessMemory,page), page);
                     }
+                    processMemoryPage.set(indexOfPageById(processMemoryPage, page), page);
                     //auxQuantBitR--;
                     pageHit++;
                 } else {
@@ -197,9 +197,9 @@ public class PageReplacementAlgorithm {
                     page.setBitR(true);
                     if (page.type.equals("W")) {
                         page.setBitM(true);
-                        processMemoryPage.set(indexOfPageById(processMemoryPage, page), page);
-                        auxProcessMemory.set(indexOfPageById(auxProcessMemory, page), page);
                     }
+                    processMemoryPage.set(indexOfPageById(processMemoryPage, page), page);
+                    auxProcessMemory.set(indexOfPageById(auxProcessMemory, page), page);
 
                 } else {
                     pageFault++;
