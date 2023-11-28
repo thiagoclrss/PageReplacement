@@ -6,6 +6,7 @@ public class Page {
     String type;
     boolean bitR = false;
     boolean bitM = false;
+
     public Page(String pageId, String type) {
         this.pageId = pageId;
         this.type = type;
@@ -48,6 +49,8 @@ public class Page {
         return "Page{" +
                 "pageId='" + pageId + '\'' +
                 ", type='" + type + '\'' +
+                ", bitR='" + bitR + '\''+
+                ", bitM='" + bitM + '\''+
                 '}';
     }
 }

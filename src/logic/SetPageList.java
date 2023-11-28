@@ -11,17 +11,18 @@ public class SetPageList {
     public static String pageFile;
     public static ArrayList<String> pages = new ArrayList<>();
     public static ArrayList<Page> pagesRW = new ArrayList<>();
+
     public SetPageList(String pages) {
         pageFile = pages;
     }
 
     public static String[] pageList;
 
-    public void setPageRW (){
+    public void setPageRW() {
         pageList = pageFile.split("-");
 
-        for(int i = 0; i < pageList.length; i++){
-            if(pageList[i].contains("R")){
+        for (int i = 0; i < pageList.length; i++) {
+            if (pageList[i].contains("R")) {
                 pageList[i] = pageList[i].replace("R", "");
                 pagesRW.add(new Page(pageList[i], "R"));
 
@@ -33,7 +34,7 @@ public class SetPageList {
         pagesRW.forEach(page -> System.out.print(page.pageId + " " + page.type + ", "));
     }
 
-    public void setPage (){
+    public void setPage() {
         pageList = pageFile.split("-");
 
         IntStream.range(0, pageList.length).forEach(i -> {
