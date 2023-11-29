@@ -9,7 +9,7 @@ public class PageReplacementAlgorithm {
     final private int frames;
     private int quantBitR;
     int auxQuantBitR = quantBitR;
-    Page pageToBeReplaced;
+    //Page pageToBeReplaced;
     ArrayList<String> pagesString;
     ArrayList<Page> pagesPage;
     ArrayList<String> processMemoryString;
@@ -60,48 +60,49 @@ public class PageReplacementAlgorithm {
     public void secondChance() {
         int pageHit = 0;
         int pageFault = 0;
-
+        Page pageToBeReplaced;
+        ArrayList<Page> auxProcessMemory = new ArrayList<>();
         for (Page page : pagesPage) {
             page.setBitR(true);
             if (auxQuantBitR == 0) auxQuantBitR = setBitRToZero(processMemoryPage);
             if (processMemoryPage.size() != (frames)) {
                 if (containsPageID(processMemoryPage, page)) {
                     //auxQuantBitR--;
+                    //auxProcessMemory.get(indexOfPageById(auxProcessMemory, page)).setBitR(true);
+                    processMemoryPage.get(indexOfPageById(processMemoryPage, page)).setBitR(true);
                     pageHit++;
                 } else {
                     //page.setBitR(true);
                     processMemoryPage.add(page);
                     System.out.println(processMemoryPage);
-                    //auxQuantBitR--;
                     pageFault++;
                 }
+                if(processMemoryPage.size() == frames) auxProcessMemory.addAll(processMemoryPage);
             } else {
                 if (containsPageID(processMemoryPage, page)) {
-                    processMemoryPage.set(indexOfPageById(processMemoryPage, page), page);
+                    auxProcessMemory.get(indexOfPageById(auxProcessMemory, page)).setBitR(true);
+                    processMemoryPage.get(indexOfPageById(processMemoryPage, page)).setBitR(true);
                     pageHit++;
-                    //auxQuantBitR--;
-                    //page.setBitR(true);
                 } else {
                     pageFault++;
-                    if (!processMemoryPage.get(0).isBitR()) {
-                        processMemoryPage.set(0, page);
-                        Collections.rotate(processMemoryPage, -1);
-                        //auxQuantBitR--;
+                    if (!auxProcessMemory.get(0).isBitR()) {
+                        pageToBeReplaced = auxProcessMemory.get(0);
+                        auxProcessMemory.set(0,page);
+                        processMemoryPage.set(indexOfPageById(processMemoryPage, pageToBeReplaced), page);
+                        Collections.rotate(auxProcessMemory, -1);
                     } else {
                         while (true) {
-                            //com o for o laço percorria todo o vetor e n add a pagina, preciso encontrar a logca para add a pagina na primeira posicao
-                            if (!processMemoryPage.get(0).isBitR()) {
-                                processMemoryPage.set(0, page);
-                                //processMemoryPage.get(0).setBitR(true);
-                                Collections.rotate(processMemoryPage, -1);
-                                if (processMemoryPage.get(frames - 1) == page) break;
-                                //Collections.rotate(processMemoryPage, -1);
+                            if (!auxProcessMemory.get(0).isBitR()) {
+                                pageToBeReplaced = auxProcessMemory.get(0);
+                                auxProcessMemory.set(0,page);
+                                processMemoryPage.set(indexOfPageById(processMemoryPage, pageToBeReplaced), page);
+                                Collections.rotate(auxProcessMemory, -1);
+                                if (auxProcessMemory.get(frames - 1) == page) break;
                             } else {
-                                processMemoryPage.get(0).setBitR(false);
-                                Collections.rotate(processMemoryPage, -1);
+                                auxProcessMemory.get(0).setBitR(false);
+                                Collections.rotate(auxProcessMemory, -1);
                             }
                         }
-                        //auxQuantBitR--;
                     }
                     System.out.println(processMemoryPage);
                 }
@@ -162,6 +163,7 @@ public class PageReplacementAlgorithm {
     public void notRecentlyUsed() {
         int pageHit = 0;
         int pageFault = 0;
+        Page pageToBeReplaced;
         ArrayList<Page> auxProcessMemory = new ArrayList<>();
         auxQuantBitR = quantBitR;
         for (Page page : pagesPage) {
@@ -175,8 +177,10 @@ public class PageReplacementAlgorithm {
                     if (page.type.equals("W")) {
                         page.setBitM(true);
                         //auxProcessMemory.set(indexOfPageById(auxProcessMemory,page), page);
+                        processMemoryPage.set(indexOfPageById(processMemoryPage, page), page);
+                    } else {
+                        processMemoryPage.get(indexOfPageById(processMemoryPage, page)).setBitR(true);
                     }
-                    processMemoryPage.set(indexOfPageById(processMemoryPage, page), page);
                     //auxQuantBitR--;
                     pageHit++;
                 } else {
@@ -197,10 +201,12 @@ public class PageReplacementAlgorithm {
                     page.setBitR(true);
                     if (page.type.equals("W")) {
                         page.setBitM(true);
+                        processMemoryPage.set(indexOfPageById(processMemoryPage, page), page);
+                        auxProcessMemory.set(indexOfPageById(auxProcessMemory, page), page);
+                    } else {
+                        auxProcessMemory.get(indexOfPageById(auxProcessMemory, page)).setBitR(true);
+                        processMemoryPage.get(indexOfPageById(processMemoryPage, page)).setBitR(true);
                     }
-                    processMemoryPage.set(indexOfPageById(processMemoryPage, page), page);
-                    auxProcessMemory.set(indexOfPageById(auxProcessMemory, page), page);
-
                 } else {
                     pageFault++;
                     boolean replaced = false;
@@ -306,11 +312,11 @@ public class PageReplacementAlgorithm {
         return page.stream().anyMatch(p -> p.getPageId().equals(pageID.pageId));
     }
 
-    int indexOfPageById(List<Page> page, Page pageID) {
+    int indexOfPageById(List<Page> pageList, Page pageID) {
         AtomicInteger i = new AtomicInteger();
-        page.forEach(p -> {
+        pageList.forEach(p -> {
             if (p.getPageId().equals(pageID.pageId)) {
-                i.set(page.indexOf(p));
+                i.set(pageList.indexOf(p));
             }
         });
         return i.get();
@@ -323,7 +329,7 @@ public class PageReplacementAlgorithm {
     }
 
     boolean isThereAnyCase(List<Page> processMemory, boolean bitR, boolean bitM) {
-        return processMemory.stream().anyMatch(p -> p.isBitR() == bitR && p.isBitR() == bitR);
+        return processMemory.stream().anyMatch(p -> p.isBitR() == bitR && p.isBitM() == bitM);
     }
 
 
