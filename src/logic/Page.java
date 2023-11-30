@@ -47,10 +47,10 @@ public class Page {
     @Override
     public String toString() {
         return "Page{" +
-                "pageId='" + pageId + '\'' +
+                "pageId='" + pageId + '\'' + /*+
                 ", type='" + type + '\'' +
                 ", bitR='" + bitR + '\''+
-                ", bitM='" + bitM + '\''+
+                ", bitM='" + bitM + '\''+*/
                 '}';
     }
 }

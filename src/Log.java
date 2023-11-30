@@ -6,7 +6,7 @@ public class Log extends JPanel {
 
     public Log() {
         setBackground(Color.BLACK);
-        logTextArea = new JTextArea(13, 60);
+        logTextArea = new JTextArea(20, 60);
         logTextArea.setEditable(false);
         logTextArea.setBackground(Color.BLACK);
         logTextArea.setForeground(Color.WHITE);

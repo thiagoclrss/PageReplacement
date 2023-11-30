@@ -63,12 +63,12 @@ public class MyFrame extends JFrame implements ActionListener {
         this.add(mruRadioButton);
 
         Log log = new Log();
-        log.setBounds(288, 300, 690, 230);
+        log.setBounds(288, 300, 690, 330);
         OutputStream outputStream = new OutputStream(log.getLogTextArea());
         System.setOut(new PrintStream(outputStream));
         add(log);
 
-        this.setSize(new Dimension(1280, 720));
+        this.setSize(new Dimension(1000, 450));
         this.setVisible(true);
     }
 

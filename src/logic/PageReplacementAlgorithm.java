@@ -112,34 +112,36 @@ public class PageReplacementAlgorithm {
         System.out.println("----------- SEGUNDA CHANCE -----------");
         System.out.println("Acertos: " + pageHit);
         System.out.println("Faltas: " + pageFault);
-        System.out.println("----------- Processos na memória -----------");
+        System.out.println("----------- Processos na memoria -----------");
         processMemoryPage.forEach(System.out::println);
     }
 
     public void leastRecentlyUsed() {
         int pageHit = 0;
         int pageFault = 0;
+        ArrayList<String> auxProcessMemory = new ArrayList<>();
         for (String s : pagesString) {
             if (processMemoryString.size() != (frames)) {
                 if (processMemoryString.contains(s)) {
                     pageHit++;
-                    processMemoryString.forEach(page -> {
-                        while (processMemoryString.indexOf(s) != processMemoryString.size() - 1) {
-                            Collections.rotate(processMemoryString.subList(processMemoryString.indexOf(s), processMemoryString.size()), -1);
+                    auxProcessMemory.forEach(page -> {
+                        while (auxProcessMemory.indexOf(s) != processMemoryString.size() - 1) {
+                            Collections.rotate(auxProcessMemory.subList(auxProcessMemory.indexOf(s), auxProcessMemory.size()), -1);
                             System.out.println(processMemoryString);
                         }
                     });
 
                 } else {
                     processMemoryString.add(s);
+                    auxProcessMemory.add(s);
                     System.out.println(processMemoryString);
                     pageFault++;
                 }
             } else {
                 if (processMemoryString.contains(s)) {
-                    processMemoryString.forEach(page -> {
-                        while (processMemoryString.indexOf(s) != frames - 1) {
-                            Collections.rotate(processMemoryString.subList(processMemoryString.indexOf(s), processMemoryString.size()), -1);
+                    auxProcessMemory.forEach(page -> {
+                        while (auxProcessMemory.indexOf(s) != frames - 1) {
+                            Collections.rotate(auxProcessMemory.subList(auxProcessMemory.indexOf(s), auxProcessMemory.size()), -1);
                             System.out.println(processMemoryString);
 
                         }
@@ -147,8 +149,10 @@ public class PageReplacementAlgorithm {
                     pageHit++;
                 } else {
                     pageFault++;
-                    processMemoryString.set(0, s);
-                    Collections.rotate(processMemoryString, -1);
+                    String stringPage = auxProcessMemory.get(0);
+                    auxProcessMemory.set(0, s);
+                    processMemoryString.set(processMemoryString.indexOf(stringPage), s);
+                    Collections.rotate(auxProcessMemory, -1);
                     System.out.println(processMemoryString);
                 }
             }
@@ -156,7 +160,7 @@ public class PageReplacementAlgorithm {
         System.out.println("----------- MRU -----------");
         System.out.println("Acertos: " + pageHit);
         System.out.println("Faltas: " + pageFault);
-        System.out.println("----------- Processos na memória -----------");
+        System.out.println("----------- Processos na memoria -----------");
         processMemoryString.forEach(System.out::println);
     }
 
@@ -169,8 +173,8 @@ public class PageReplacementAlgorithm {
         for (Page page : pagesPage) {
             //auxQuantBitR--;
             page.setBitR(true);
-            if (auxQuantBitR == 0) auxQuantBitR = setBitRToZero(auxProcessMemory);
             if (processMemoryPage.size() != (frames)) {
+                if (auxQuantBitR == 0) auxQuantBitR = setBitRToZero(processMemoryPage);
                 //auxQuantBitR--;
                 if (containsPageID(processMemoryPage, page)) {
                     page.setBitR(true);
@@ -194,6 +198,7 @@ public class PageReplacementAlgorithm {
                 }
                 if (processMemoryPage.size() == frames) auxProcessMemory.addAll(processMemoryPage);
             } else {
+                if (auxQuantBitR == 0) auxQuantBitR = setBitRToZero(auxProcessMemory);
                 //auxQuantBitR--;
                 if (containsPageID(processMemoryPage, page)) {
                     pageHit++;
