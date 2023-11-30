@@ -1,3 +1,5 @@
+package GUI;
+
 import java.io.IOException;
 import javax.swing.JTextArea;
 

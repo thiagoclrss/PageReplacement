@@ -1,3 +1,5 @@
+package GUI;
+
 import logic.PageReplacementAlgorithm;
 import logic.SetPageList;
 
@@ -21,7 +23,7 @@ public class MyFrame extends JFrame implements ActionListener {
     int bitsTextValue;
 
 
-    MyFrame() {
+    public MyFrame() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new FlowLayout());
 
